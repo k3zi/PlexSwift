@@ -1,15 +1,21 @@
 import XCTest
-@testable import PlexSwift
+import PlexSwift
 
 final class PlexSwiftTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(PlexSwift().text, "Hello, World!")
+
+    func testPinRequest() {
+        let plex = Plex()
+        let pinRequest = try! plex.signIn().waitFirst()
+        XCTAssertNotNil(pinRequest)
+        guard case .inviteCode(let code) = pinRequest else {
+            XCTFail()
+            return
+        }
+
+        XCTAssertEqual(code.count, 4)
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testPinRequest", testPinRequest),
     ]
 }
